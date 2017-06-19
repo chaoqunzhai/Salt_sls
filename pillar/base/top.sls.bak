@@ -1,0 +1,13 @@
+base:
+#  '*':
+#    - packages
+
+prod:
+  fusion15q4:
+    - match: nodegroup
+    - fusion.fusion15q4
+  fusion16q2:
+    - match: nodegroup
+    - fusion.fusion16q2
+  '*':
+    - mapmatch.config

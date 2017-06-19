@@ -1,0 +1,4 @@
+NETWORKING=yes
+{% for id,id_number in pillar.duoche.iteritems() %}
+HOSTNAME=TI{{ id_number + 1 }}
+{% endfor %}

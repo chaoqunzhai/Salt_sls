@@ -1,0 +1,19 @@
+base:
+  '*':
+    - init.env_init
+  'map*':
+    - init.env_init
+prod:
+  fusion15q4:
+    - match: nodegroup
+    - fusion.install
+#  'minion[5-6]':
+#    - zabbix.install
+#    - haproxy.install
+#    - cluster.haproxy-outside
+#    - cluster.haproxy-outside-keepalived
+#  'minion[5-6]':
+#    - memcached.install
+#    - php.install
+#  'map*':
+#    - map.install

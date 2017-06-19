@@ -1,0 +1,37 @@
+import json
+import MySQLdb
+import random
+def __virtual():
+  return 'local_saltcmd'
+def returner(ret):
+  status = '2'
+  cmd = ''
+  NOW = 'NOW()'
+  PILLAR='pillar.items'
+  result_file = '/var/log/salt/returner_salt_cmd.log'
+  conn=MySQLdb.connect(host='172.16.30.133',user='Salt',passwd='Salt',db='Salt',port=3306)
+  cursor=conn.cursor()
+  host_salt_id=''
+  with open(result_file,'a+') as f:
+    if ret:
+      if ret['fun'] != str("grains.items"):
+        status = "0"
+        sql = 'INSERT INTO salt_saltrun (fun,fun_args,job,statues,date,ip_id) values(%s,%s,%s,%s,%s,%s)'
+        sql_ip = """select id from salt_hostname where ip='%s'""" %(__grains__['ip'])
+        host_id=cursor.execute(sql_ip)
+        results=cursor.fetchall()
+        for row in results:
+          host_salt_id = row[0]
+        f.write(str(json.dumps(status)) + '\n' +str(json.dumps(ret))+'\n' + str(json.dumps(host_id)) + 'host_id' +str(host_salt_id) + sql_ip + str(json.dumps(ret.values()))[1:-1]+'\n')
+        if ret['fun'] == str('pillar.items'):
+          cursor.execute(sql %(str(json.dumps(ret['fun'])),'"' + str('*') + '"','"' + str(random.uniform(10,50)) + '*' + '"',str(json.dumps(status)),NOW,int(host_salt_id)))
+        elif len(ret['fun_args']) == 2:
+          cursor.execute(sql %(str(json.dumps(ret['fun'])),'"' + str('*') + '"','"' + str(random.uniform(10,50)) + '*' + '"',str(json.dumps(status)),NOW,int(host_salt_id)))
+        else:
+          for cmd in list(ret['fun_args']):
+            cmd = '"' + str(cmd) +  '"'
+       # f.write(str(json.dumps(ret['fun']))+'\n'+str(cmd)+'\n'+str(json.dumps(ret['jid']))+'\n' +str(json.dumps(status)))
+            cursor.execute(sql %(str(json.dumps(ret['fun'])),str(cmd),str(json.dumps(ret['jid'])),str(json.dumps(status)),NOW,int(host_salt_id)))
+      conn.commit()
+      cursor.close()
+      conn.close()

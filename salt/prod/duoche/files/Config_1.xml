@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="GBK" standalone="yes" ?>
+<TiService>
+    <SysInfo Runtime="1" ProcessTime="4" TimeIdInterval="30" OutputInterval="60"/>
+	<ZKServer Host="172.16.20.71:2181,172.16.20.116:2181,172.16.20.117:2181" TimeOut="2000"/>
+	<KafKaServer BrokerList="172.16.20.1:9092,172.16.20.2:9092,172.16.20.3:9092" StiTopic="STI" TiTopic="TI"/>
+	<ThreadPool MinCapacity="1" MaxCapacity="10" IdleTime="60"/>
+	<TiCalGroup MapPath="FCDMAP/" GroupPath="GRPMAP/" CalGroupID="{{ grains['duoche1'] }}" CityListPath="TiCalGroupList.csv" MapFileNameFormat="FCD_XXXX_17Q2.csv" GroupFileNameFormat="GRP_XXXX_17Q2.txt" />
+	<TiCalOffline />
+	<HisDB Enable="0">
+		<Sever IP="" Port="" AdvanceTime="5" TimeidInterval="30" UpdateInterval="60" />
+		<Fill FillType="0" MinWeight="0.53" MaxMatchDis="20" MapPath="" MapFileNameFormat="FCD_XXXX_17Q2_SN.csv"/>
+	</HisDB>
+</TiService>

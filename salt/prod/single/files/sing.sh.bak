@@ -1,0 +1,58 @@
+#!/bin/bash
+#for i in `ls /usr/local/ |grep "SingleTiService*"`;do
+#echo $i
+#done
+service="singleTiService"
+Sing1="/usr/local/SingleTiService15/"
+Sing2="/usr/local/SingleTiService16/"
+Kill_PID=`ps -ef |grep $service |grep -v grep |awk '{print $2}'`
+Pid_Num=`ps -ef |grep $service |grep -v grep |wc -l`
+start (){
+        if [ $Pid_Num -gt 0 ];then
+		echo -e "\033[34;1m单车进程已存在\033[0m"
+	else
+		cd $Sing1
+                nohup ${Sing1}$service &>/dev/null &
+#		echo "${Sing1}$service 启动完成"
+		cd $Sing2
+                nohup ${Sing2}$service &>/dev/null &
+#		echo "${Sing1}$service 启动完成"
+	fi
+
+
+}
+
+restart (){
+	if [ $Pid_Num -gt 0 ];then
+		for i in $Kill_PID;do
+			`kill -9 $i`
+		done
+
+		cd $Sing1
+		nohup ${Sing1}$service &>/dev/null &
+#		echo "${Sing1}$service 启动完成"
+		cd $Sing2
+		nohup ${Sing2}$service &>/dev/null &
+#		echo "${Sing1}$service 启动完成"
+	else
+                cd $Sing1
+                nohup ${Sing1}$service &>/dev/null &
+		cd $Sing2
+                nohup ${Sing2}$service &>/dev/null &
+	fi
+}
+case $1 in
+	start)
+	start
+	;;
+	stop)
+	for i in $Kill_PID;do
+		`kill -9 $i`
+	done
+	;;
+	restart)
+	restart
+	;;
+#	*)
+#	echo -e "\033[32;1mPlease Enter [start|stop|restart]\033[0m"
+esac	

@@ -1,0 +1,6 @@
+{{pillar['ip']}}   localhost       # Added by NetworkManager
+127.0.0.1       localhost.localdomain   localhost
+::1     localhost       localhost6.localdomain6 localhost6
+172.16.20.1 kafka1
+172.16.20.2 kafka2
+172.16.20.3 kafka3
